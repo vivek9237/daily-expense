@@ -1,0 +1,357 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+        table, th, td 
+        {
+            margin:10px 0;
+            border:solid 1px #333;
+            padding:2px 4px;
+            font:15px Verdana;
+        }
+        th {
+            font-weight:bold;
+        }
+		
+#loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid blue;
+  border-bottom: 16px solid blue;
+  width: 60px;
+  height: 60px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  visibility:hidden;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+		
+		body {margin:0;}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+
+}
+input[type=date], select {
+    width: 50%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+input[type=text], select {
+    width: 50%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=button] {
+    width: 25%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=button]:hover {
+    background-color: #45a049;
+}
+
+div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}	
+
+
+#tableID {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#tableID td, #tableID th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#tableID tr:nth-child(even){background-color: #f2f2f2;}
+
+#tableID tr:hover {background-color: #ddd;}
+
+#tableID th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+    </style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script>
+  
+  var script_url = "https://script.google.com/macros/s/AKfycbxrSF_eZPNqkac_ny79-ZuYU3vBGKabYQ1gWdAi7vIjCaXql0A/exec";
+  
+  // Make an AJAX call to Google Script
+  function insert_value() {
+    
+	$("#re").css("visibility","hidden");
+	 document.getElementById("loader").style.visibility = "visible";
+	$('#mySpinner').addClass('spinner');
+
+	var id1=	"X"+$("#id").val();
+	console.log(id1);
+	var name= $("#name").val().replace("+","%2B");
+	
+	
+    var url = script_url+"?callback=ctrlq&name="+name+"&id="+id1+"&action=insert";
+  
+
+    var request = jQuery.ajax({
+      crossDomain: true,
+      url: url ,
+      method: "GET",
+      dataType: "jsonp"
+    });
+
+  }
+
+
+  
+  
+ 
+  
+  
+  function update_value(){
+	$("#re").css("visibility","hidden");
+     document.getElementById("loader").style.visibility = "visible";
+	
+	
+	var id1=	"X"+$("#id").val();
+	var name= $("#name").val().replace("+","%2B");
+	
+	
+	
+    var url = script_url+"?callback=ctrlq&name="+name+"&id="+id1+"&action=update";
+  
+
+    var request = jQuery.ajax({
+      crossDomain: true,
+      url: url ,
+      method: "GET",
+      dataType: "jsonp"
+    });
+
+	
+  }
+	function getCurrentDate(d){
+		var m_names = new Array("Jan", "Feb", "Mar", 
+		"Apr", "May", "Jun", "Jul", "Aug", "Sep", 
+		"Oct", "Nov", "Dec");
+		
+		
+		var curr_date = d.getDate();
+		var curr_month = d.getMonth();
+		var curr_year = d.getFullYear();
+		
+		return curr_date+"-"+curr_month+"-"+curr_year;
+	}
+  
+ 
+  
+  
+  function delete_value(){
+	$("#re").css("visibility","hidden");
+     document.getElementById("loader").style.visibility = "visible";
+	$('#mySpinner').addClass('spinner');
+	var id1=	"X"+$("#id").val();
+	var name= $("#name").val();
+	
+	
+    var url = script_url+"?callback=ctrlq&name="+name+"&id="+id1+"&action=delete";
+  
+
+    var request = jQuery.ajax({
+      crossDomain: true,
+      url: url ,
+      method: "GET",
+      dataType: "jsonp"
+    });
+
+  }
+
+
+  
+  
+  // print the returned data
+  function ctrlq(e) {
+  
+	
+	$("#re").html(e.result);
+	$("#re").css("visibility","visible");
+	read_value();
+	
+  }
+  
+  
+
+  
+function read_value() {
+
+$("#re").css("visibility","hidden");
+   
+   document.getElementById("loader").style.visibility = "visible";
+ var url = script_url+"?action=read";
+
+$.getJSON(url, function (json) {
+
+    // Set the variables from the results array
+   
+   
+  
+
+        // CREATE DYNAMIC TABLE.
+        var table = document.createElement("table");
+		table.setAttribute('id', 'tableID');
+
+        var header = table.createTHead();
+		var row = header.insertRow(0);     
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+	
+		cell1.innerHTML = "<b>ID</b>";
+		cell2.innerHTML = "<b>Name</b>";
+        
+        // ADD JSON DATA TO THE TABLE AS ROWS.
+        for (var i = 0; i < json.records.length; i++) {
+
+            tr = table.insertRow(-1);
+				var tabCell = tr.insertCell(-1);
+                tabCell.innerHTML = json.records[i].ID;
+				tabCell = tr.insertCell(-1);
+				tabCell.innerHTML = json.records[i].NAME;
+            }
+      
+
+        // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+        var divContainer = document.getElementById("showData");
+        divContainer.innerHTML = "";
+        divContainer.appendChild(table);
+		document.getElementById("loader").style.visibility = "hidden";
+		$("#re").css("visibility","visible");
+    });
+	}
+  function myFunction() {
+    var x = document.getElementById("myTopnav");
+    if (x.className === "topnav") {
+        x.className += " responsive";
+    } else {
+        x.className = "topnav";
+    }
+}
+  </script>
+
+
+  
+  
+</head>
+<body>
+<div class="topnav" id="myTopnav">
+  <a href="#home" class="active">Home</a>
+  <a href="test2.html">Vivek</a>
+  <a href="Aarti.html">Aarti</a>
+  <a href="Holiday.html">Holiday</a>
+  <a href="Petrol.html">Petrol</a>
+  <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
+</div>
+<div align="center">
+<h1>Daily Expense</h1> 
+<form >
+
+<input type = "date" data-date-inline-picker="true" name ="id" id="id" placeholder= "Date">
+<input type = "text" name ="name" id="name" placeholder = "Your Expense">
+
+</form>
+
+<div id="loader"></div>
+
+<p id="re"></p>
+
+<input type = "button"  id = "b1" onClick="insert_value()" value = "Insert"></input>
+<input type="button" onclick="read_value()" value="Read" />
+<input type="button" onclick="update_value()" value="Update" />
+<input type="button" onclick="delete_value()" value="Delete" />
+<div id="showData"></div>
+</div>
+</body>
+<div align="center">
+<p>Vivek & Arati</p>
+</div>
+<html>
