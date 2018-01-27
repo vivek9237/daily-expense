@@ -90,7 +90,7 @@
 
 }
 input[type=date], select {
-    width: 50%;
+    width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
@@ -99,7 +99,7 @@ input[type=date], select {
     box-sizing: border-box;
 }
 input[type=text], select {
-    width: 50%;
+    width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
@@ -168,7 +168,8 @@ div {
 
 	var id1=	"*"+$("#id").val();
 	console.log(id1);
-	var name= ($("#name").val().split("+").join("%2B")).split("-").join("0-");
+	var temp= $("#name").val().split("+").join("%2B");
+	var name = temp.split("-").join("0-")
 	console.log(name);
 	var max = "170";
 	
