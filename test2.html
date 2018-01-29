@@ -210,18 +210,23 @@ div {
 
   // Make an AJAX call to Google Script
   function insert_value() {
-	$("#re").css("visibility","hidden");
-	document.getElementById("text").innerHTML = "Adding...";
-	document.getElementById("overlay").style.display = "block";
-	$('#mySpinner').addClass('spinner');
-
+	
+	
 	var id1=	"*"+$("#id").val();
 	console.log(id1);
 	var temp= $("#name").val().split("+").join("%2B");
 	var name = temp.split("-").join("0-")
 	console.log(name);
 	var max = "170";
-	
+	if(!validateExpense(name))
+	{
+		alert("Enter value in expense");
+		return;
+	}
+	$("#re").css("visibility","hidden");
+	document.getElementById("text").innerHTML = "Adding...";
+	document.getElementById("overlay").style.display = "block";
+	$('#mySpinner').addClass('spinner');
 	
     var url = script_url+"?callback=ctrlq&name="+name+"&id="+id1+"&max="+max+"&action=insert";
   
@@ -241,16 +246,20 @@ div {
   
   
   function update_value(){
-	$("#re").css("visibility","hidden");
-	document.getElementById("text").innerHTML = "Updating..";
-	 document.getElementById("overlay").style.display = "block";
+
 	
 	var id1=	"*"+$("#id").val();
 	var temp= $("#name").val().split("+").join("%2B");
 	var name = temp.split("-").join("0-")
+		if(!validateExpense(name))
+	{
+		alert("Enter value in expense");
+		return;
+	}
 	
-	
-	
+		$("#re").css("visibility","hidden");
+	document.getElementById("text").innerHTML = "Updating..";
+	 document.getElementById("overlay").style.display = "block";
     var url = script_url+"?callback=ctrlq&name="+name+"&id="+id1+"&action=update";
   
 
@@ -320,7 +329,15 @@ div {
   }
   
   
-
+function validateExpense(name){
+	if(name==""){
+		return false;
+	}
+	else {
+		return true;
+	}
+	
+}
   
 function read_value() {
 
@@ -421,13 +438,17 @@ function sortTable() {
     }
   }
 }
+
+function onload(){
+document.getElementById("id").valueAsDate = new Date();
+}
 </script>
 
 
   
   
 </head>
-<body>
+<body  onload="onload()">
 <div id="overlay">
  <img id="load" class="" src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/c3c4d331234507.564a1d23db8f9.gif" allign = "center" width=256" height="256" data-hd-src="" />
 <div id="text">Loading...</div>
@@ -444,8 +465,8 @@ function sortTable() {
 <h1>Daily Expense</h1> 
 <form >
 
-<input type = "date" data-date-inline-picker="true" name ="id" id="id" placeholder= "Date">
-<input type = "number" name ="name" id="name" placeholder = "Your Expense" autocomplete="off">
+<input type = "date" data-date-inline-picker="true" name ="id" id="id" placeholder= "Date" required>
+<input type = "number" name ="name" id="name" placeholder = "Your Expense" autocomplete="off" required>
 
 
 </form>
