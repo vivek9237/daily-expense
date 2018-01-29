@@ -213,11 +213,13 @@ div {
 	
 	
 	var id1=	"*"+$("#id").val();
-	console.log(id1);
+	//console.log(id1);
 	var temp= $("#name").val().split("+").join("%2B");
+	console.log(temp);
 	var name = temp.split("-").join("0-")
 	console.log(name);
 	var max = "170";
+	console.log(validateExpense(name));
 	if(!validateExpense(name))
 	{
 		alert("Enter value in expense");
@@ -251,7 +253,7 @@ div {
 	var id1=	"*"+$("#id").val();
 	var temp= $("#name").val().split("+").join("%2B");
 	var name = temp.split("-").join("0-")
-		if(!validateExpense(name))
+	if(!validateExpense(name))
 	{
 		alert("Enter value in expense");
 		return;
@@ -466,7 +468,7 @@ document.getElementById("id").valueAsDate = new Date();
 <form >
 
 <input type = "date" data-date-inline-picker="true" name ="id" id="id" placeholder= "Date" required>
-<input type = "number" name ="name" id="name" placeholder = "Your Expense" autocomplete="off" required>
+<input type = "text" name ="name" id="name" placeholder = "Your Expense" autocomplete="off" required pattern="[0-9,-,+]+">
 
 
 </form>
