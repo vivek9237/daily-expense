@@ -3,16 +3,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-        table, th, td 
-        {
-            margin:10px 0;
-            border:solid 1px #333;
-            padding:2px 4px;
-            font:15px Verdana;
-        }
-        th {
-            font-weight:bold;
-        }
+table, th, td 
+{
+    margin:10px 0;
+    border:solid 1px #333;
+    padding:2px 4px;
+    font:15px Verdana;
+}
+th {
+    font-weight:bold;
+}
+
 		
 #loader {
   border: 16px solid #f3f3f3;
@@ -152,18 +153,54 @@ div {
     background-color: #4CAF50;
     color: white;
 }
+
+#overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 2;
+    cursor: pointer;
+}
+
+#text{
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    font-size: 50px;
+    color: white;
+    background-color: rgba(0,0,0,0);
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+}
+#load{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 50px;
+    color: white;
+    background-color: rgba(0,0,0,0);
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+}
     </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 <script>
   
   var script_url = "https://script.google.com/macros/s/AKfycbxrSF_eZPNqkac_ny79-ZuYU3vBGKabYQ1gWdAi7vIjCaXql0A/exec";
-  
+
+
   // Make an AJAX call to Google Script
   function insert_value() {
-    
 	$("#re").css("visibility","hidden");
-	 document.getElementById("loader").style.visibility = "visible";
+	document.getElementById("text").innerHTML = "Adding new Record!";
+	document.getElementById("overlay").style.display = "block";
 	$('#mySpinner').addClass('spinner');
 
 	var id1=	"*"+$("#id").val();
@@ -183,7 +220,6 @@ div {
       method: "GET",
       dataType: "jsonp"
     });
-
   }
 
 
@@ -194,7 +230,8 @@ div {
   
   function update_value(){
 	$("#re").css("visibility","hidden");
-     document.getElementById("loader").style.visibility = "visible";
+	document.getElementById("text").innerHTML = "Updating Record!";
+	 document.getElementById("overlay").style.display = "block";
 	
 	var id1=	"*"+$("#id").val();
 	var name= $("#name").val().replace("+","%2B");
@@ -234,7 +271,8 @@ div {
         
     
 	$("#re").css("visibility","hidden");
-     document.getElementById("loader").style.visibility = "visible";
+	document.getElementById("text").innerHTML = "Deleting Record!";
+	 document.getElementById("overlay").style.display = "block";
 	$('#mySpinner').addClass('spinner');
 	var id1=	"*"+$("#id").val();
 	var name= $("#name").val();
@@ -274,8 +312,8 @@ div {
 function read_value() {
 
 $("#re").css("visibility","hidden");
-   
-   document.getElementById("loader").style.visibility = "visible";
+   document.getElementById("text").innerHTML = "Loading...";
+   document.getElementById("overlay").style.display = "block";
  var url = script_url+"?action=read";
 
 $.getJSON(url, function (json) {
@@ -321,7 +359,7 @@ $.getJSON(url, function (json) {
         var divContainer = document.getElementById("showData");
         divContainer.innerHTML = "";
         divContainer.appendChild(table);
-		document.getElementById("loader").style.visibility = "hidden";
+		document.getElementById("overlay").style.display = "none";
 		$("#re").css("visibility","visible");
     });
 	}
@@ -340,12 +378,16 @@ $.getJSON(url, function (json) {
   
 </head>
 <body>
+<div id="overlay">
+ <img id="load" class="" src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/04de2e31234507.564a1d23645bf.gif" allign = "center" width=256" height="256" data-hd-src="" />
+<div id="text">Loading...</div>
+</div>
 <div class="topnav" id="myTopnav">
   <a href="#home" class="active">Home</a>
   <a href="test2.html">Vivek</a>
-  <a href="Aarti.html">Aarti</a>
   <a href="Holiday.html">Holiday</a>
   <a href="Petrol.html">Petrol</a>
+  <a href="Others.html">Holiday</a>
   <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
 </div>
 <div align="center">
@@ -357,7 +399,6 @@ $.getJSON(url, function (json) {
 
 </form>
 
-<div id="loader"></div>
 
 <p id="re"></p>
 
@@ -367,8 +408,9 @@ $.getJSON(url, function (json) {
 <input type="button" onclick="delete_value()" value="Delete" />
 <div id="showData"></div>
 </div>
+
 </body>
 <div align="center">
-<p>Vivek & Arati</p>
+
 </div>
 <html>
