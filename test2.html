@@ -235,7 +235,8 @@ div {
 	 document.getElementById("overlay").style.display = "block";
 	
 	var id1=	"*"+$("#id").val();
-	var name= $("#name").val().replace("+","%2B");
+	var temp= $("#name").val().split("+").join("%2B");
+	var name = temp.split("-").join("0-")
 	
 	
 	
