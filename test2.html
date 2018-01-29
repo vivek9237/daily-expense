@@ -177,6 +177,7 @@ div {
     background-color: rgba(0,0,0,0);
     transform: translate(-50%,-50%);
     -ms-transform: translate(-50%,-50%);
+
 }
 #load{
     position: absolute;
@@ -199,7 +200,7 @@ div {
   // Make an AJAX call to Google Script
   function insert_value() {
 	$("#re").css("visibility","hidden");
-	document.getElementById("text").innerHTML = "Adding new Record!";
+	document.getElementById("text").innerHTML = "Adding...";
 	document.getElementById("overlay").style.display = "block";
 	$('#mySpinner').addClass('spinner');
 
@@ -230,7 +231,7 @@ div {
   
   function update_value(){
 	$("#re").css("visibility","hidden");
-	document.getElementById("text").innerHTML = "Updating Record!";
+	document.getElementById("text").innerHTML = "Updating..";
 	 document.getElementById("overlay").style.display = "block";
 	
 	var id1=	"*"+$("#id").val();
@@ -271,7 +272,7 @@ div {
         
     
 	$("#re").css("visibility","hidden");
-	document.getElementById("text").innerHTML = "Deleting Record!";
+	document.getElementById("text").innerHTML = "Deleting...";
 	 document.getElementById("overlay").style.display = "block";
 	$('#mySpinner').addClass('spinner');
 	var id1=	"*"+$("#id").val();
