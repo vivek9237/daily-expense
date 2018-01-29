@@ -108,6 +108,15 @@ input[type=text], select {
     border-radius: 4px;
     box-sizing: border-box;
 }
+input[type=number], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
 
 input[type=button] {
     width: 25%;
@@ -413,6 +422,8 @@ function sortTable() {
   }
 }
 </script>
+
+
   
   
 </head>
@@ -434,10 +445,10 @@ function sortTable() {
 <form >
 
 <input type = "date" data-date-inline-picker="true" name ="id" id="id" placeholder= "Date">
-<input type = "text" name ="name" id="name" placeholder = "Your Expense">
+<input type = "number" name ="name" id="name" placeholder = "Your Expense" autocomplete="off">
+
 
 </form>
-
 
 <p id="re"></p>
 
