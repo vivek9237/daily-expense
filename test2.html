@@ -123,7 +123,7 @@ input[type=number], select {
 }
 
 input[type=button] {
-    width: 50%;
+    width: 25%;
     background-color: #4CAF50;
     color: white;
     padding: 14px 20px;
@@ -137,7 +137,7 @@ input[type=button]:hover {
     background-color: #45a049;
 }
 #deleteButton {
-    width: 50%;
+    width: 25%;
     background-color: #f46741;
     color: white;
     padding: 14px 20px;
@@ -364,12 +364,22 @@ div {
 		
 		return curr_date+"-"+curr_month+"-"+curr_year;
 	}
-  
+	
+  function deletePrompt(message) {
+    var person = prompt(message, "");
+    if (person == "" || person== null || person.length<3) {
+		return false;
+		alert("Deletion failed!")
+    }
+	else{
+	return true;
+	}
+}
  
   
   
   function delete_value(){
-    if (confirm("Delete Record for "+$("#id").val()+"!")) {
+    if (deletePrompt("Delete Record for "+$("#id").val()+"!\nEnter 3 characters to confirm")) {
         
     
 	$("#re").css("visibility","hidden");
