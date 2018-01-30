@@ -368,8 +368,9 @@ div {
   function deletePrompt(message) {
     var person = prompt(message, "");
     if (person == "" || person== null || person.length<3) {
+		alert("Deletion failed!");
 		return false;
-		alert("Deletion failed!")
+		
     }
 	else{
 	return true;
