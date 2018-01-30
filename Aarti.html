@@ -2,8 +2,10 @@
 <title>Expense for Aarti</title>
 <link rel="icon" href="download.PNG" type="image/x-icon">
 <head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0' name='viewport' />
+
 <style>
 table, th, td 
 {
@@ -134,7 +136,20 @@ input[type=button] {
 input[type=button]:hover {
     background-color: #45a049;
 }
+#deleteButton {
+    width: 25%;
+    background-color: #f46741;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
 
+#deleteButton:hover {
+    background-color: #f44e42;
+}
 div {
     border-radius: 5px;
     background-color: #f2f2f2;
@@ -205,6 +220,7 @@ div {
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
 <script>
   
   var script_url = "https://script.google.com/macros/s/AKfycbxrSF_eZPNqkac_ny79-ZuYU3vBGKabYQ1gWdAi7vIjCaXql0A/exec";
@@ -217,11 +233,11 @@ div {
 	var id1=	"*"+$("#id").val();
 	//console.log(id1);
 	var temp= $("#name").val().split("+").join("%2B");
-	console.log(temp);
+	//console.log(temp);
 	var name = temp.split("-").join("0-")
-	console.log(name);
+	//console.log(name);
 	var max = "170";
-	console.log(validateExpense(name));
+	//console.log(validateExpense(name));
 	if(!validateExpense(name))
 	{
 		alert("Enter value in expense");
@@ -273,7 +289,7 @@ div {
       method: "GET",
       dataType: "jsonp"
     });
-
+	
 	
   }
 	function getCurrentDate(d){
@@ -325,7 +341,10 @@ div {
   // print the returned data
   function ctrlq(e) {
   
-	
+	if(e.result=="Expense Record Already crreated for this date. Use Update button to update."){
+		update_value();
+		return;
+	}
 	$("#re").html(e.result);
 	$("#re").css("visibility","visible");
 	read_value();
@@ -348,11 +367,11 @@ function read_value() {
 $("#re").css("visibility","hidden");
    document.getElementById("text").innerHTML = "Loading...";
    document.getElementById("overlay").style.display = "block";
-   console.log("wewe");
+   //console.log("wewe");
  var url = script_url+"?action=read&sheet="+sheetname;
-console.log("123");
+//console.log("123");
 $.getJSON(url, function (json) {
-		console.log("asd");
+	//	console.log("asd");
     // Set the variables from the results array
    
         // CREATE DYNAMIC TABLE.
@@ -362,13 +381,14 @@ $.getJSON(url, function (json) {
         var header = table.createTHead();
 		var row = header.insertRow(0);     
 		var cell1 = row.insertCell(0);
-		var cell2 = row.insertCell(1);
-		var cell3 = row.insertCell(2);
-		var cell4 = row.insertCell(3);
-		var cell5 = row.insertCell(4);
+	//	var cell2 = row.insertCell(1);
+		var cell3 = row.insertCell(1);
+		var cell4 = row.insertCell(2);
+		var cell5 = row.insertCell(3);
 	
-		cell1.innerHTML = "<b>Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button onclick=\"sortTable()\"> ^ </button></b>";
-		cell2.innerHTML = "<b>Breakdown</b>";
+		cell1.innerHTML = "<b>Date</b>";
+		cell1.setAttribute('onclick', 'sortTable()');
+		//cell2.innerHTML = "<b>Breakdown</b>";
 		cell3.innerHTML = "<b>Expense</b>";
 		cell4.innerHTML = "<b>Max</b>";
 		cell5.innerHTML = "<b>Savings</b>";
@@ -381,8 +401,13 @@ $.getJSON(url, function (json) {
                 tabCell.innerHTML = json.records[i].ID;
 				tabCell = tr.insertCell(-1);
 				tabCell.innerHTML = json.records[i].breakdown;
+				tabCell.setAttribute('class', 'breakdown');
+				tabCell.setAttribute('style', 'display:none;');
+				tabCell.setAttribute('id', i);
 				tabCell = tr.insertCell(-1);
 				tabCell.innerHTML = json.records[i].NAME;
+				tabCell.setAttribute('class', 'expense');
+				tabCell.setAttribute('onclick', 'openPopUp('+i+')');
 				tabCell = tr.insertCell(-1);
 				tabCell.innerHTML = json.records[i].max;
 				tabCell = tr.insertCell(-1);
@@ -395,9 +420,11 @@ $.getJSON(url, function (json) {
         divContainer.innerHTML = "";
         divContainer.appendChild(table);
 		document.getElementById("overlay").style.display = "none";
+		sortTable();
 		$("#re").css("visibility","visible");
     });
 	}
+	
   function myFunction() {
     var x = document.getElementById("myTopnav");
     if (x.className === "topnav") {
@@ -406,8 +433,13 @@ $.getJSON(url, function (json) {
         x.className = "topnav";
     }
 }
-  </script>
+function openPopUp(id){
+var breakdown = document.getElementById(id).innerText;
+alert("Clicked "+breakdown);
+}
 
+
+  </script>
 <script>
 function sortTable() {
   var table, rows, switching, i, x, y, shouldSwitch;
@@ -453,11 +485,12 @@ document.getElementById("id").valueAsDate = new Date();
   
   
 </head>
-<body  onload="onload()">
+<body  onload="read_value();onload()">
 <div id="overlay">
  <img id="load" class="" src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/c3c4d331234507.564a1d23db8f9.gif" allign = "center" width=256" height="256" data-hd-src="" />
 <div id="text">Loading...</div>
 </div>
+<div id="dialog" title="Basic dialog"></div>
 <div class="topnav" id="myTopnav">
   <a href="index.html" class="active">Home</a>
   <a href="test2.html">Vivek</a>
@@ -471,7 +504,7 @@ document.getElementById("id").valueAsDate = new Date();
 <h1>Daily Expense for Aarti</h1> 
 <form >
 
-<input type = "date" data-date-inline-picker="true" name ="id" id="id" placeholder= "Date" required>
+<input type = "date" data-date-inline-picker="true" name ="id" id="id" placeholder= "Date" required max="new Date()">
 <input type = "text" name ="name" id="name" placeholder = "Your Expense" autocomplete="off" required pattern="[0-9,-,+]+">
 
 
@@ -479,18 +512,15 @@ document.getElementById("id").valueAsDate = new Date();
 
 <p id="re"></p>
 
-<input type = "button"  id = "b1" onClick="insert_value()" value = "Insert"></input>
-<input type="button" onclick="read_value()" value="Read" />
-<input type="button" onclick="update_value()" value="Update" />
-<input type="button" onclick="delete_value()" value="Delete" />
+<input type = "button"  id = "b1" onClick="insert_value()" value = "Add / Update"></input>
+<input type="button" id="deleteButton" onclick="delete_value()" value="Delete" />
 
-<div id="showData"></div>
+<div id="showData">
+
+</div>
 
 
 </div>
 
 </body>
-<div align="center">
-
-</div>
 <html>

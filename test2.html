@@ -136,7 +136,20 @@ input[type=button] {
 input[type=button]:hover {
     background-color: #45a049;
 }
+#deleteButton {
+    width: 25%;
+    background-color: #f46741;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
 
+#deleteButton:hover {
+    background-color: #f44e42;
+}
 div {
     border-radius: 5px;
     background-color: #f2f2f2;
@@ -202,6 +215,63 @@ div {
     transform: translate(-50%,-50%);
     -ms-transform: translate(-50%,-50%);
 }
+
+/* Popup container - can be anything you want */
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* The actual popup */
+.popup .popuptext {
+    visibility: hidden;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+    from {opacity: 0;} 
+    to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+}
     </style>
 
 
@@ -220,11 +290,11 @@ div {
 	var id1=	"*"+$("#id").val();
 	//console.log(id1);
 	var temp= $("#name").val().split("+").join("%2B");
-	console.log(temp);
+	//console.log(temp);
 	var name = temp.split("-").join("0-")
-	console.log(name);
+	//console.log(name);
 	var max = "170";
-	console.log(validateExpense(name));
+	//console.log(validateExpense(name));
 	if(!validateExpense(name))
 	{
 		alert("Enter value in expense");
@@ -248,7 +318,10 @@ div {
 
 
   
-  
+  function popupBreakdown() {
+    var popup = document.getElementById("myPopup");
+    popup.classList.toggle("show");
+}
  
   
   
@@ -276,7 +349,7 @@ div {
       method: "GET",
       dataType: "jsonp"
     });
-
+	
 	
   }
 	function getCurrentDate(d){
@@ -328,7 +401,10 @@ div {
   // print the returned data
   function ctrlq(e) {
   
-	
+	if(e.result=="Expense Record Already crreated for this date. Use Update button to update."){
+		update_value();
+		return;
+	}
 	$("#re").html(e.result);
 	$("#re").css("visibility","visible");
 	read_value();
@@ -351,11 +427,11 @@ function read_value() {
 $("#re").css("visibility","hidden");
    document.getElementById("text").innerHTML = "Loading...";
    document.getElementById("overlay").style.display = "block";
-   console.log("wewe");
+   //console.log("wewe");
  var url = script_url+"?action=read&sheet="+sheetname;
-console.log("123");
+//console.log("123");
 $.getJSON(url, function (json) {
-		console.log("asd");
+	//	console.log("asd");
     // Set the variables from the results array
    
         // CREATE DYNAMIC TABLE.
@@ -370,7 +446,8 @@ $.getJSON(url, function (json) {
 		var cell4 = row.insertCell(2);
 		var cell5 = row.insertCell(3);
 	
-		cell1.innerHTML = "<b>Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button onclick=\"sortTable()\"> ^ </button></b>";
+		cell1.innerHTML = "<b>Date</b>";
+		cell1.setAttribute('onclick', 'sortTable()');
 		//cell2.innerHTML = "<b>Breakdown</b>";
 		cell3.innerHTML = "<b>Expense</b>";
 		cell4.innerHTML = "<b>Max</b>";
@@ -403,6 +480,7 @@ $.getJSON(url, function (json) {
         divContainer.innerHTML = "";
         divContainer.appendChild(table);
 		document.getElementById("overlay").style.display = "none";
+		sortTable();
 		$("#re").css("visibility","visible");
     });
 	}
@@ -467,7 +545,7 @@ document.getElementById("id").valueAsDate = new Date();
   
   
 </head>
-<body  onload="onload()">
+<body  onload="read_value();onload()">
 <div id="overlay">
  <img id="load" class="" src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/c3c4d331234507.564a1d23db8f9.gif" allign = "center" width=256" height="256" data-hd-src="" />
 <div id="text">Loading...</div>
@@ -483,9 +561,12 @@ document.getElementById("id").valueAsDate = new Date();
   <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
 </div>
 <div align="center">
+
 <h1>Daily Expense for Vivek</h1> 
 <form >
-
+<div class="popup" onclick="popupBreakdown()">Click me to toggle the popup!
+  <span class="popuptext" id="myPopup">A Simple Popup!</span>
+</div>
 <input type = "date" data-date-inline-picker="true" name ="id" id="id" placeholder= "Date" required max="new Date()">
 <input type = "text" name ="name" id="name" placeholder = "Your Expense" autocomplete="off" required pattern="[0-9,-,+]+">
 
@@ -494,10 +575,8 @@ document.getElementById("id").valueAsDate = new Date();
 
 <p id="re"></p>
 
-<input type = "button"  id = "b1" onClick="insert_value()" value = "Insert"></input>
-<input type="button" onclick="read_value()" value="Read" />
-<input type="button" onclick="update_value()" value="Update" />
-<input type="button" onclick="delete_value()" value="Delete" />
+<input type = "button"  id = "b1" onClick="insert_value()" value = "Add / Update"></input>
+<input type="button" id="deleteButton" onclick="delete_value()" value="Delete" />
 
 <div id="showData">
 
