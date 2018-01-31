@@ -140,6 +140,7 @@ function validateExpense(name){
 
 
 function read_value() {
+	document.getElementById("name").value = "";
 	$("#re").css("visibility","hidden");
 	document.getElementById("text").innerHTML = "Loading...";
 	document.getElementById("overlay").style.display = "block";
