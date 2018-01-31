@@ -253,5 +253,8 @@ function sortTable() {
 }
 
 function onload(){
+	document.getElementsByTagName("body")[0].setAttribute("oncopy", "return false");
+	document.getElementsByTagName("body")[0].setAttribute("oncut", "return false");
+	document.getElementsByTagName("body")[0].setAttribute("onpaste", "return false");
 	document.getElementById("id").valueAsDate = new Date();
 }
