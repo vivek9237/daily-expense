@@ -7,6 +7,7 @@ function getSheetName(){
 	return document.getElementById("sheetname").innerText;
 }
 function getMaxValue(){
+	console.log(document.getElementById("maxValue").innerText);
 	return document.getElementById("maxValue").innerText;
 }
 // Make an AJAX call to Google Script
@@ -14,6 +15,7 @@ function insert_value() {
 	var id1=	"*"+$("#id").val();
 	var temp= $("#name").val().split("+").join("%2B");
 	var name = temp.split("-").join("0-")
+	console.log("before getting max value");
 	var max = getMaxValue();
 	if(!validateExpense(name))
 	{
