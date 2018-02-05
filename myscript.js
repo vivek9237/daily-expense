@@ -6,12 +6,15 @@ var valueReturnedFromGoogleIfAlreadyExist = "Expense Record Already crreated for
 function getSheetName(){
 	return document.getElementById("sheetname").innerText;
 }
+function getMaxValue(){
+	return document.getElementById("maxValue").innerText;
+}
 // Make an AJAX call to Google Script
 function insert_value() {
 	var id1=	"*"+$("#id").val();
 	var temp= $("#name").val().split("+").join("%2B");
 	var name = temp.split("-").join("0-")
-	var max = "170";
+	var max = getMaxValue();
 	if(!validateExpense(name))
 	{
 		alert(expenseValidationMessage);
