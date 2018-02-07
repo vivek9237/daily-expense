@@ -7,15 +7,14 @@ function getSheetName(){
 	return document.getElementById("sheetname").innerText;
 }
 function getMaxValue(){
-	console.log(document.getElementById("maxValue").innerText);
 	return document.getElementById("maxValue").innerText;
 }
 // Make an AJAX call to Google Script
 function insert_value() {
+	var weekNum = getWeekFromDate(new Date($("#id").val()));
 	var id1=	"*"+$("#id").val();
 	var temp= $("#name").val().split("+").join("%2B");
 	var name = temp.split("-").join("0-")
-	console.log("before getting max value");
 	var max = getMaxValue();
 	if(!validateExpense(name))
 	{
@@ -27,7 +26,7 @@ function insert_value() {
 	document.getElementById("overlay").style.display = "block";
 	$('#mySpinner').addClass('spinner');
 	
-	var url = script_url+"?callback=ctrlq&name="+name+"&id="+id1+"&max="+max+"&sheet="+getSheetName()+"&action=insert";
+	var url = script_url+"?callback=ctrlq&name="+name+"&id="+id1+"&max="+max+"&sheet="+getSheetName()+"&weekNum="+weekNum+"&action=insert";
 
 	var request = jQuery.ajax({
 		crossDomain: true,
@@ -54,6 +53,7 @@ function popupBreakdown(id) {
   
   
 function update_value(){
+	var weekNum = getWeekFromDate(new Date($("#id").val()));
 	var id1=	"*"+$("#id").val();
 	var temp= $("#name").val().split("+").join("%2B");
 	var name = temp.split("-").join("0-")
@@ -66,7 +66,7 @@ function update_value(){
 	$("#re").css("visibility","hidden");
 	document.getElementById("text").innerHTML = "Updating..";
 	document.getElementById("overlay").style.display = "block";
-	var url = script_url+"?callback=ctrlq&name="+name+"&id="+id1+"&sheet="+getSheetName()+"&action=update";
+	var url = script_url+"?callback=ctrlq&name="+name+"&id="+id1+"&sheet="+getSheetName()+"&weekNum="+weekNum+"&action=update";
 	
 	var request = jQuery.ajax({
 		crossDomain: true,
@@ -74,16 +74,6 @@ function update_value(){
 		method: "GET",
 		dataType: "jsonp"
 	});
-}
-function getCurrentDate(d){
-	var m_names = new Array("Jan", "Feb", "Mar", 
-	"Apr", "May", "Jun", "Jul", "Aug", "Sep", 
-	"Oct", "Nov", "Dec");
-	var curr_date = d.getDate();
-	var curr_month = d.getMonth();
-	var curr_year = d.getFullYear();
-	
-	return curr_date+"-"+curr_month+"-"+curr_year;
 }
 	
 function deletePrompt(message) {
@@ -263,4 +253,26 @@ function onload(){
 	document.getElementsByTagName("body")[0].setAttribute("oncut", "return false");
 	document.getElementsByTagName("body")[0].setAttribute("onpaste", "return false");
 	document.getElementById("id").valueAsDate = new Date();
+}
+
+
+function indexOnload(){
+	document.getElementById("weeknumber").innerHTML = "Week Number = "+getWeekFromDate(new Date());
+	document.getElementById("weekDayName").innerHTML = "Today is "+getDayNameFromDate(new Date());
+	document.getElementById("monthName").innerHTML = "Current month - "+getMonthNameFromDate(new Date());
+}
+
+function getWeekFromDate(date){
+	var onejan = new Date(date.getFullYear(), 0, 1);
+	return Math.ceil((((date - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+}
+
+function getDayNameFromDate(date){
+	var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+	return dayNames[date.getDay()]
+}
+
+function getMonthNameFromDate(date){
+	var month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    return month[date.getMonth()];
 }
