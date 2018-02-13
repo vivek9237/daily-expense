@@ -6,10 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="commonHolidays.css">
 <script src="myscript.js"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 </head>
-<body onload="onload()">
-
+<body onload="onload();read_value_2()">
+<div id="overlay">
+	<img id="load" class="" src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/c3c4d331234507.564a1d23db8f9.gif" allign = "center" width=256" height="256" data-hd-src="" />
+	<div id="text">Loading...</div>
+</div>
+<div id="dialog" title="Basic dialog"></div>
 <div class="topnav" id="myTopnav">
   <a href="index.html">Home</a>
   <a href="test2.html">Vivek</a>
@@ -23,15 +27,16 @@
   <h2>Holiday page under construction!</h2>
 	<input type = "date" data-date-inline-picker="true" name ="id" id="id" placeholder= "Date" required max="new Date()">
 	<input type = "text" name ="name" id="name" placeholder = "Your Expense" autocomplete="off" required pattern="[0-9,-,+]+">
-	<select >
+	<select id="paidby">
 		<option value="novalue" disabled="disabled" hidden= "true" selected="selected">Select paid by</option>
 		<option value="Aarti">Aarti</option>
 		<option value="Vivek">Vivek</option>
 	</select>
 	<p id="re"></p>
-	<input type = "button"  id = "b1" onClick="insert_value_holidays()" value = "Add / Update"></input>
-	<input type="button" id="deleteButton" onclick="delete_value_holidays()" value="Delete" />
+	<input type = "button"  id = "b1" onClick="insert_value_2()" value = "Add / Update"></input>
+	<input type="button" id="deleteButton" onclick="delete_value_2()" value="Delete" />
 	<div id="showData"></div>
+	<p id="sheetname" hidden="false">holidays</p>
 </div>
 </body>
 </html>

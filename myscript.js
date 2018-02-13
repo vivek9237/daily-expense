@@ -259,7 +259,7 @@ function onload(){
 function indexOnload(){
 	document.getElementById("weeknumber").innerHTML = "Week Number = "+getWeekFromDate(new Date());
 	document.getElementById("weekDayName").innerHTML = "Today is "+getDayNameFromDate(new Date());
-	document.getElementById("monthName").innerHTML = "Current month - "+getMonthNameFromDate(new Date());
+	//document.getElementById("monthName").innerHTML = "Current month - "+getMonthNameFromDate(new Date());
 }
 
 function getWeekFromDate(date){
@@ -275,4 +275,147 @@ function getDayNameFromDate(date){
 function getMonthNameFromDate(date){
 	var month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     return month[date.getMonth()];
+}
+//////////////////////////////////////////////////////////////
+
+
+
+function insert_value_2(){
+	var weekNum = getWeekFromDate(new Date($("#id").val()));
+	var id1=	"*"+$("#id").val();
+	var temp= $("#name").val().split("+").join("%2B");
+	var name = temp.split("-").join("0-")
+	if(!validateExpense(name))
+	{
+		alert(expenseValidationMessage);
+		return;
+	}
+	var paidBy = $("#paidby").val();
+	if(paidBy == null)
+	{
+		alert(expenseValidationMessage);
+		return;
+	}
+	$("#re").css("visibility","hidden");
+	document.getElementById("text").innerHTML = "Adding...";
+	document.getElementById("overlay").style.display = "block";
+	$('#mySpinner').addClass('spinner');
+	
+	var url = script_url+"?callback=ctrlq2&name="+name+"&id="+id1+"&paidBy="+paidBy+"&sheet="+getSheetName()+"&weekNum="+weekNum+"&action=insert2";
+
+	var request = jQuery.ajax({
+		crossDomain: true,
+		url: url ,
+		method: "GET",
+		dataType: "jsonp"
+	});
+}
+
+function update_value_2(){
+	var weekNum = getWeekFromDate(new Date($("#id").val()));
+	var id1=	"*"+$("#id").val();
+	var temp= $("#name").val().split("+").join("%2B");
+	var name = temp.split("-").join("0-")
+	if(!validateExpense(name))
+	{
+		alert(expenseValidationMessage);
+		return;
+	}
+	
+	$("#re").css("visibility","hidden");
+	document.getElementById("text").innerHTML = "Updating..";
+	document.getElementById("overlay").style.display = "block";
+	var url = script_url+"?callback=ctrlq2&name="+name+"&id="+id1+"&sheet="+getSheetName()+"&weekNum="+weekNum+"&action=update2";
+	
+	var request = jQuery.ajax({
+		crossDomain: true,
+		url: url ,
+		method: "GET",
+		dataType: "jsonp"
+	});
+}
+
+function ctrlq2(e) {
+	if(e.result==valueReturnedFromGoogleIfAlreadyExist){
+		update_value_2();
+		return;
+	}
+	$("#re").html(e.result);
+	$("#re").css("visibility","visible");
+	read_value_2();	
+}
+
+
+function read_value_2() {
+	document.getElementById("name").value = "";
+	$("#re").css("visibility","hidden");
+	document.getElementById("text").innerHTML = "Loading...";
+	document.getElementById("overlay").style.display = "block";
+	var url = script_url+"?action=read&sheet="+getSheetName();
+	$.getJSON(url, function (json) {
+    // Set the variables from the results array
+   
+        // CREATE DYNAMIC TABLE.
+        var table = document.createElement("table");
+		table.setAttribute('id', 'tableID');
+
+        var header = table.createTHead();
+		var row = header.insertRow(0);     
+		var cell1 = row.insertCell(0);
+		var cell3 = row.insertCell(1);
+		var cell4 = row.insertCell(2);
+	
+		cell1.innerHTML = "<b>Date</b>";
+		cell3.innerHTML = "<b>Paid By</b>";
+		cell4.innerHTML = "<b>Expense</b>";
+        var body = table.createTBody();
+        // ADD JSON DATA TO THE TABLE AS ROWS.
+        for (var i = 0; i < json.records.length; i++) {		
+			if(json.records[i].ID.length>1){
+            tr = body.insertRow(-1);
+				var tabCell = tr.insertCell(-1);
+                tabCell.innerHTML = json.records[i].ID;
+				tabCell = tr.insertCell(-1);
+				tabCell.innerHTML = json.records[i].breakdown;
+				tabCell.setAttribute('class', 'breakdown');
+				tabCell.setAttribute('style', 'display:none;');
+				tabCell.setAttribute('id', i);
+				tabCell = tr.insertCell(-1);
+				tabCell.innerHTML = json.records[i].NAME;
+				tabCell = tr.insertCell(-1);
+				tabCell.innerHTML = "<div class=\"popup\" onclick=\"popupBreakdown('myPopup"+i+"')\">"+json.records[i].Paid+"<span class=\"popuptext\" id=\"myPopup"+i+"\">&nbsp;&nbsp;"+json.records[i].breakdown+"&nbsp;&nbsp;</span></div>";
+				tabCell.setAttribute('class', 'expense');
+            }
+      }
+
+        // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+        var divContainer = document.getElementById("showData");
+        divContainer.innerHTML = "";
+        divContainer.appendChild(table);
+		document.getElementById("overlay").style.display = "none";
+		sortTable();
+		$("#re").css("visibility","visible");
+    });
+}
+
+
+function delete_value_2(){
+	if (deletePrompt("Delete Record for "+$("#id").val()+"!\nEnter 3 characters to confirm")) {
+		$("#re").css("visibility","hidden");
+		document.getElementById("text").innerHTML = "Deleting...";
+		document.getElementById("overlay").style.display = "block";
+		$('#mySpinner').addClass('spinner');
+		var id1=	"*"+$("#id").val();
+		var name= $("#name").val();
+		var url = script_url+"?callback=ctrlq2&name="+name+"&id="+id1+"&sheet="+getSheetName()+"&action=delete";
+		var request = jQuery.ajax({
+			crossDomain: true,
+			url: url ,
+			method: "GET",
+			dataType: "jsonp"
+		});
+	} else {
+		return;
+	}
+	
 }
