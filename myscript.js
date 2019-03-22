@@ -1,5 +1,5 @@
 //Global Variables
-var script_url = "https://script.google.com/macros/s/AKfycbxrSF_eZPNqkac_ny79-ZuYU3vBGKabYQ1gWdAi7vIjCaXql0A/exec";
+var script_url = "https://script.google.com/macros/s/AKfycbxuFz4K2unwqSZnnmxYtnj0KTjA-e4yslYc6JjAl2BdRDLMIR4/exec";
 
 var expenseValidationMessage = "Enter value in expense";
 var valueReturnedFromGoogleIfAlreadyExist = "Expense Record Already crreated for this date. Use Update button to update.";
